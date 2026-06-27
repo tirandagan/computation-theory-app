@@ -10,9 +10,22 @@ export function Lead({ children }: { children: ReactNode }) {
   )
 }
 
-export function P({ children }: { children: ReactNode }) {
+export function P({
+  children,
+  className,
+}: {
+  children: ReactNode
+  className?: string
+}) {
   return (
-    <p className="text-pretty leading-relaxed text-foreground/90">{children}</p>
+    <p
+      className={cn(
+        'text-pretty leading-relaxed text-foreground/90',
+        className,
+      )}
+    >
+      {children}
+    </p>
   )
 }
 
