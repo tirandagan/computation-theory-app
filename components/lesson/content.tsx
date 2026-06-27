@@ -2,6 +2,12 @@
 
 import { DFA_EXAMPLES, NFA_EXAMPLES } from '@/lib/automata'
 import { AutomatonLab } from '@/components/labs/automaton-lab'
+import { AutomatonBuilder } from '@/components/labs/automaton-builder'
+import { SubsetLab } from '@/components/labs/subset-lab'
+import { CfgLab } from '@/components/labs/cfg-lab'
+import { PdaLab } from '@/components/labs/pda-lab'
+import { ReductionLab } from '@/components/labs/reduction-lab'
+import { ComplexityLab } from '@/components/labs/complexity-lab'
 import { TuringLab } from '@/components/labs/turing-lab'
 import { RegexLab } from '@/components/labs/regex-lab'
 import { PumpingLab } from '@/components/labs/pumping-lab'
@@ -110,6 +116,24 @@ export function LessonBody({ topicId }: { topicId: string }) {
         </>
       )
 
+    case 'fa-builder':
+      return (
+        <>
+          <Lead>
+            Now build a machine from scratch. Drop states onto the canvas, wire
+            up transitions, pick which states start and accept — then let the
+            grader test your design against an entire language.
+          </Lead>
+          <AutomatonBuilder />
+          <Callout kind="tip" title="How to play">
+            Add a few states, mark one as the start and one or more as accepting,
+            then connect them with transitions for each symbol. Pick a challenge
+            and press <em>Grade my machine</em>: it runs your automaton on dozens
+            of strings it should accept and reject.
+          </Callout>
+        </>
+      )
+
     /* ------------------------------ Nondeterminism ----------------------------- */
     case 'nfa-intro':
       return (
@@ -173,6 +197,28 @@ export function LessonBody({ topicId }: { topicId: string }) {
             The &ldquo;third symbol from the end&rdquo; NFA has only four states,
             but its equivalent DFA needs eight. Feed it <M>10100</M> and watch how
             the machine keeps multiple guesses alive simultaneously.
+          </Callout>
+        </>
+      )
+
+    case 'nfa-subset':
+      return (
+        <>
+          <Lead>
+            Theorems are best understood by running them. Watch the subset
+            construction turn a small NFA into an equivalent DFA, one worklist
+            step at a time.
+          </Lead>
+          <SubsetLab />
+          <P>
+            Each DFA state is a <em>set</em> of NFA states. We start from the
+            ε-closure of the NFA start state and repeatedly ask: for each input
+            symbol, which set of NFA states could we be in next? Every new set we
+            discover gets added to the worklist until nothing new appears.
+          </P>
+          <Callout kind="tip" title="Watch for the blow-up">
+            The &ldquo;third symbol from the end&rdquo; NFA has 4 states; its DFA
+            needs 8. That doubling is the <M>2ⁿ</M> worst case made concrete.
           </Callout>
         </>
       )
@@ -299,6 +345,22 @@ export function LessonBody({ topicId }: { topicId: string }) {
           </P>
         </>
       )
+    case 'cfg-lab':
+      return (
+        <>
+          <Lead>
+            Pick a grammar, type a string, and watch a leftmost derivation unfold
+            into a parse tree. If the string is in the language, every rewrite is
+            shown; if not, no parse tree exists.
+          </Lead>
+          <CfgLab />
+          <Callout kind="tip" title="Try this">
+            On the balanced-parentheses grammar, compare <M>(())</M> with{' '}
+            <M>(()</M>. The first builds a clean nested tree; the second simply
+            cannot be derived.
+          </Callout>
+        </>
+      )
     case 'pda-intro':
       return (
         <>
@@ -316,6 +378,22 @@ export function LessonBody({ topicId }: { topicId: string }) {
           <Callout kind="tip" title="The hierarchy so far">
             Regular ⊊ Context-free. Each new memory model — no memory, then a
             stack, then a full tape — recognizes strictly more languages.
+          </Callout>
+        </>
+      )
+    case 'pda-lab':
+      return (
+        <>
+          <Lead>
+            Drive a pushdown automaton and keep your eye on the stack. The marker{' '}
+            <M>$</M> sits at the bottom so the machine can tell when the stack is
+            empty again.
+          </Lead>
+          <PdaLab />
+          <Callout kind="tip" title="Try this">
+            Run the <M>{'{ 0ⁿ1ⁿ }'}</M> PDA on <M>000111</M>: the stack rises to
+            three markers as 0s arrive, then drains back to empty as the 1s are
+            matched. Feed it <M>0011 1</M> and watch it reject.
           </Callout>
         </>
       )
@@ -408,6 +486,23 @@ export function LessonBody({ topicId }: { topicId: string }) {
         </>
       )
 
+    case 'dec-reduction':
+      return (
+        <>
+          <Lead>
+            The undecidability of <M>Aᴛᴍ</M> rests on two moves: a self-referential
+            machine, and a diagonal that escapes every row. Step through both.
+          </Lead>
+          <ReductionLab />
+          <P>
+            The grid makes the counting argument tangible: list every machine as
+            a row and every machine&apos;s description as a column. The flipped
+            diagonal describes a behavior that disagrees with row{' '}
+            <M>i</M> at column <M>i</M>, so it equals no machine in the list.
+          </P>
+        </>
+      )
+
     /* -------------------------------- Complexity ------------------------------- */
     case 'p-np':
       return (
@@ -457,6 +552,23 @@ export function LessonBody({ topicId }: { topicId: string }) {
             tractable — the same idea of reduction that proved undecidability now
             charts the landscape of hardness.
           </Callout>
+        </>
+      )
+    case 'np-lab':
+      return (
+        <>
+          <Lead>
+            Feel the P vs NP gap directly. On the left, <em>verifying</em> an
+            assignment is instant. On the right, <em>finding</em> one may force a
+            search through all <M>2ⁿ</M> possibilities.
+          </Lead>
+          <ComplexityLab />
+          <P>
+            SAT is the canonical NP-complete problem. A satisfying assignment is a
+            short certificate anyone can check quickly — yet no one knows a
+            general way to find one without, in the worst case, exponential
+            search. That gap is the million-dollar question.
+          </P>
         </>
       )
 

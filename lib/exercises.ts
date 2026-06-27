@@ -1,0 +1,257 @@
+/** Auto-graded exercises attached to curriculum topics. */
+
+export interface Question {
+  id: string
+  prompt: string
+  options: string[]
+  /** index of the correct option */
+  answer: number
+  /** shown after answering */
+  explanation: string
+}
+
+export interface ExerciseSet {
+  /** matches a topic id in the curriculum */
+  topicId: string
+  questions: Question[]
+}
+
+export const EXERCISES: ExerciseSet[] = [
+  {
+    topicId: 'fa-formal',
+    questions: [
+      {
+        id: 'fa-q1',
+        prompt: 'In the 5-tuple (Q, Σ, δ, q₀, F), what is δ?',
+        options: [
+          'the set of accept states',
+          'the transition function Q × Σ → Q',
+          'the input alphabet',
+          'the start state',
+        ],
+        answer: 1,
+        explanation:
+          'δ is the transition function: given a state and an input symbol, it returns the next state.',
+      },
+      {
+        id: 'fa-q2',
+        prompt: 'A language is called regular exactly when…',
+        options: [
+          'it is finite',
+          'it contains the empty string',
+          'some finite automaton recognizes it',
+          'it can be sorted',
+        ],
+        answer: 2,
+        explanation:
+          'Regular is defined as “recognized by some finite automaton” — equivalently by an NFA or a regular expression.',
+      },
+      {
+        id: 'fa-q3',
+        prompt: 'A DFA accepts a string w when…',
+        options: [
+          'it visits an accept state at some point while reading w',
+          'it ends in an accept state after reading all of w',
+          'every state it visits is an accept state',
+          'it never gets stuck',
+        ],
+        answer: 1,
+        explanation:
+          'Acceptance is about the final state after consuming the entire input, not intermediate states.',
+      },
+    ],
+  },
+  {
+    topicId: 'nfa-equiv',
+    questions: [
+      {
+        id: 'nfa-q1',
+        prompt: 'An NFA with n states can blow up to a DFA with at most…',
+        options: ['n states', 'n² states', '2ⁿ states', 'n! states'],
+        answer: 2,
+        explanation:
+          'The subset construction makes DFA states out of subsets of the n NFA states — up to 2ⁿ of them.',
+      },
+      {
+        id: 'nfa-q2',
+        prompt: 'Compared with DFAs, NFAs recognize…',
+        options: [
+          'strictly more languages',
+          'strictly fewer languages',
+          'exactly the same class (the regular languages)',
+          'only finite languages',
+        ],
+        answer: 2,
+        explanation:
+          'Nondeterminism adds convenience, not power, for finite automata: NFAs and DFAs both recognize the regular languages.',
+      },
+    ],
+  },
+  {
+    topicId: 're-intro',
+    questions: [
+      {
+        id: 're-q1',
+        prompt: 'Which string is NOT matched by (0 ∪ 1)*01 ?',
+        options: ['01', '0001', '1101', '10'],
+        answer: 3,
+        explanation:
+          'The expression requires the string to end in 01. “10” does not end in 01, so it is rejected.',
+      },
+      {
+        id: 're-q2',
+        prompt: 'The star operation R* always includes…',
+        options: [
+          'at least one copy of R',
+          'the empty string ε',
+          'exactly two copies of R',
+          'nothing',
+        ],
+        answer: 1,
+        explanation:
+          'R* means zero or more repetitions, so ε (zero copies) is always in R*.',
+      },
+    ],
+  },
+  {
+    topicId: 'pl-intro',
+    questions: [
+      {
+        id: 'pl-q1',
+        prompt: 'The pumping lemma is used to prove that a language is…',
+        options: [
+          'regular',
+          'not regular',
+          'context-free',
+          'decidable',
+        ],
+        answer: 1,
+        explanation:
+          'We use its contrapositive: if a language fails the pumping condition, it cannot be regular.',
+      },
+      {
+        id: 'pl-q2',
+        prompt: 'In s = xyz with |s| ≥ p, which condition must hold?',
+        options: ['|y| = 0', '|xy| ≤ p and |y| > 0', 'x = ε', '|z| ≤ p'],
+        answer: 1,
+        explanation:
+          'The lemma guarantees a pumpable middle y with |y| > 0 located within the first p symbols, so |xy| ≤ p.',
+      },
+    ],
+  },
+  {
+    topicId: 'cfg-intro',
+    questions: [
+      {
+        id: 'cfg-q1',
+        prompt: 'The grammar S → 0S1 | ε generates exactly…',
+        options: [
+          'all binary strings',
+          'strings 0ⁿ1ⁿ for n ≥ 0',
+          'palindromes',
+          'strings with equal 0s and 1s in any order',
+        ],
+        answer: 1,
+        explanation:
+          'Each use of S → 0S1 adds a matching 0 and 1 around the recursion, yielding 0ⁿ1ⁿ.',
+      },
+    ],
+  },
+  {
+    topicId: 'tm-intro',
+    questions: [
+      {
+        id: 'tm-q1',
+        prompt: 'What distinguishes a Turing machine from a PDA?',
+        options: [
+          'it has more states',
+          'it can read input',
+          'it has an unbounded tape it can read AND write, with two-way head movement',
+          'it is nondeterministic',
+        ],
+        answer: 2,
+        explanation:
+          'The read/write tape with a head that moves both directions is what gives the TM its full power.',
+      },
+      {
+        id: 'tm-q2',
+        prompt: 'The Church–Turing thesis claims that…',
+        options: [
+          'all problems are decidable',
+          'Turing machines capture exactly the intuitive notion of algorithm',
+          'P = NP',
+          'every language is regular',
+        ],
+        answer: 1,
+        explanation:
+          'It identifies “algorithm” with “what a Turing machine can do” — a thesis, not a theorem.',
+      },
+    ],
+  },
+  {
+    topicId: 'dec-halting',
+    questions: [
+      {
+        id: 'halt-q1',
+        prompt: 'The acceptance problem Aᴛᴍ is…',
+        options: [
+          'decidable',
+          'undecidable but Turing-recognizable',
+          'regular',
+          'context-free',
+        ],
+        answer: 1,
+        explanation:
+          'Aᴛᴍ is recognizable (simulate M on w) but undecidable, shown via diagonalization.',
+      },
+      {
+        id: 'halt-q2',
+        prompt: 'The contradiction in the halting proof comes from…',
+        options: [
+          'a machine running out of tape',
+          'a machine D being asked about its own description ⟨D⟩',
+          'an infinite alphabet',
+          'two DFAs being equivalent',
+        ],
+        answer: 1,
+        explanation:
+          'Self-reference: D on ⟨D⟩ must do the opposite of what it does, which is impossible.',
+      },
+    ],
+  },
+  {
+    topicId: 'p-np',
+    questions: [
+      {
+        id: 'pnp-q1',
+        prompt: 'NP is the class of languages whose membership can be…',
+        options: [
+          'solved in polynomial time',
+          'verified in polynomial time given a certificate',
+          'recognized by a DFA',
+          'solved in constant time',
+        ],
+        answer: 1,
+        explanation:
+          'NP = verifiable in polynomial time. Whether that equals polynomial-time solvable (P) is the open question.',
+      },
+      {
+        id: 'pnp-q2',
+        prompt: 'A problem is NP-complete if it is in NP and…',
+        options: [
+          'every NP problem reduces to it in polynomial time',
+          'it is also in P',
+          'it has no certificate',
+          'it is undecidable',
+        ],
+        answer: 0,
+        explanation:
+          'NP-complete = in NP and NP-hard (everything in NP reduces to it). SAT was the first, via Cook–Levin.',
+      },
+    ],
+  },
+]
+
+export function exercisesFor(topicId: string): ExerciseSet | undefined {
+  return EXERCISES.find((e) => e.topicId === topicId)
+}

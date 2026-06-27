@@ -5,7 +5,18 @@ export interface Topic {
   title: string
   blurb: string
   /** Optional key for an embedded interactive simulator. */
-  lab?: 'dfa' | 'nfa' | 'regex' | 'turing' | 'pumping'
+  lab?:
+    | 'dfa'
+    | 'nfa'
+    | 'regex'
+    | 'turing'
+    | 'pumping'
+    | 'builder'
+    | 'subset'
+    | 'cfg'
+    | 'pda'
+    | 'reduction'
+    | 'sat'
 }
 
 export interface Module {
@@ -44,6 +55,12 @@ export const CURRICULUM: Module[] = [
         blurb: 'Trace a deterministic finite automaton symbol by symbol.',
         lab: 'dfa',
       },
+      {
+        id: 'fa-builder',
+        title: 'Lab: Design your own machine',
+        blurb: 'Draw states and transitions, then beat the language challenges.',
+        lab: 'builder',
+      },
     ],
   },
   {
@@ -69,6 +86,12 @@ export const CURRICULUM: Module[] = [
         title: 'Lab: Explore an NFA',
         blurb: 'Watch nondeterminism explore many states simultaneously.',
         lab: 'nfa',
+      },
+      {
+        id: 'nfa-subset',
+        title: 'Lab: NFA → DFA conversion',
+        blurb: 'Animate the subset construction one worklist step at a time.',
+        lab: 'subset',
       },
     ],
   },
@@ -128,9 +151,21 @@ export const CURRICULUM: Module[] = [
         blurb: 'Variables, terminals, rules, and derivations.',
       },
       {
+        id: 'cfg-lab',
+        title: 'Lab: Derive with a grammar',
+        blurb: 'Watch a leftmost derivation build a parse tree.',
+        lab: 'cfg',
+      },
+      {
         id: 'pda-intro',
         title: 'Pushdown automata',
         blurb: 'Finite control plus a stack — the machine for CFLs.',
+      },
+      {
+        id: 'pda-lab',
+        title: 'Lab: Run a pushdown automaton',
+        blurb: 'Step a PDA across its input and watch the stack grow and shrink.',
+        lab: 'pda',
       },
     ],
   },
@@ -173,6 +208,12 @@ export const CURRICULUM: Module[] = [
         title: 'The halting problem',
         blurb: 'A self-referential argument proves Aᵀᴹ is undecidable.',
       },
+      {
+        id: 'dec-reduction',
+        title: 'Lab: The halting argument',
+        blurb: 'Step through diagonalization and the self-reference contradiction.',
+        lab: 'reduction',
+      },
     ],
   },
   {
@@ -192,6 +233,12 @@ export const CURRICULUM: Module[] = [
         id: 'np-complete',
         title: 'NP-completeness',
         blurb: 'The hardest problems in NP and the Cook–Levin theorem.',
+      },
+      {
+        id: 'np-lab',
+        title: 'Lab: SAT & the P vs NP gap',
+        blurb: 'Verify a certificate instantly, then watch brute-force search blow up.',
+        lab: 'sat',
       },
     ],
   },

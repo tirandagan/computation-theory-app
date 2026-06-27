@@ -1,12 +1,13 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import {
   ArrowLeft,
   ArrowRight,
   Check,
   ChevronLeft,
+  Flame,
   FlaskConical,
   Menu,
   X,
@@ -19,6 +20,9 @@ import {
 } from '@/lib/curriculum'
 import { LessonBody } from '@/components/lesson/content'
 import { AboutDialog } from '@/components/about-dialog'
+import { Quiz } from '@/components/exercise/quiz'
+import { exercisesFor } from '@/lib/exercises'
+import { useProgress } from '@/lib/progress'
 import { cn } from '@/lib/utils'
 
 export function LearnWorkspace({ initialTopic }: { initialTopic?: string }) {
