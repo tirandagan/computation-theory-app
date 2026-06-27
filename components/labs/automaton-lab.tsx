@@ -95,7 +95,7 @@ export function AutomatonLab({ machines }: Props) {
 
       <div className="grid gap-0 lg:grid-cols-[1.4fr_1fr]">
         {/* graph */}
-        <div className="bg-grid relative border-b border-border p-2 lg:border-b-0 lg:border-r">
+        <div className="bg-grid relative flex border-b border-border p-2 lg:border-b-0 lg:border-r">
           <AutomatonGraph automaton={machine} active={current.active} />
           {machine.nondeterministic && (
             <span className="absolute left-3 top-3 rounded-md bg-accent/20 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-accent">

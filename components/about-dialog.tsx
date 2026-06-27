@@ -1,11 +1,15 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Info, X, BookMarked, Mail, Code2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export function AboutDialog({ className }: { className?: string }) {
   const [open, setOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => setMounted(true), [])
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -13,7 +17,13 @@ export function AboutDialog({ className }: { className?: string }) {
     }
     if (open) {
       document.addEventListener('keydown', onKey)
-      return () => document.removeEventListener('keydown', onKey)
+      // Prevent the page behind the modal from scrolling.
+      const prev = document.body.style.overflow
+      document.body.style.overflow = 'hidden'
+      return () => {
+        document.removeEventListener('keydown', onKey)
+        document.body.style.overflow = prev
+      }
     }
   }, [open])
 
@@ -30,9 +40,9 @@ export function AboutDialog({ className }: { className?: string }) {
         <Info className="size-4" />
       </button>
 
-      {open && (
+      {open && mounted && createPortal(
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto p-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="about-title"
@@ -40,9 +50,9 @@ export function AboutDialog({ className }: { className?: string }) {
           <button
             aria-hidden
             onClick={() => setOpen(false)}
-            className="absolute inset-0 bg-background/80 backdrop-blur-sm"
+            className="fixed inset-0 bg-background/80 backdrop-blur-sm"
           />
-          <div className="relative w-full max-w-md overflow-hidden rounded-2xl border border-border bg-card shadow-2xl">
+          <div className="relative my-auto w-full max-w-md overflow-hidden rounded-2xl border border-border bg-card shadow-2xl">
             <div className="flex items-start justify-between border-b border-border px-6 py-5">
               <div className="flex items-center gap-3">
                 <span className="grid size-9 place-items-center rounded-md bg-primary font-serif text-lg text-primary-foreground">
@@ -130,7 +140,8 @@ export function AboutDialog({ className }: { className?: string }) {
               </a>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </>
   )
