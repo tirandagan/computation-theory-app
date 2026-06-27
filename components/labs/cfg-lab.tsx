@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import { Check, X, CornerDownRight } from 'lucide-react'
 import { GRAMMARS, deriveLeftmost, type Grammar, type ParseNode } from '@/lib/cfg'
+import { PinchZoom } from '@/components/ui/pinch-zoom'
 import { cn } from '@/lib/utils'
 
 /* ---------------------------- parse-tree layout ---------------------------- */
@@ -53,6 +54,7 @@ function TreeSvg({ tree }: { tree: ParseNode }) {
   walk(root)
 
   return (
+    <PinchZoom className="h-full max-h-[300px] w-full">
     <svg
       viewBox={`0 0 ${w} ${height}`}
       className="h-full max-h-[300px] w-full"
@@ -99,6 +101,7 @@ function TreeSvg({ tree }: { tree: ParseNode }) {
         )
       })}
     </svg>
+    </PinchZoom>
   )
 }
 
