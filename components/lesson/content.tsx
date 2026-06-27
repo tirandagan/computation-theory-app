@@ -11,6 +11,10 @@ import { ComplexityLab } from '@/components/labs/complexity-lab'
 import { TuringLab } from '@/components/labs/turing-lab'
 import { RegexLab } from '@/components/labs/regex-lab'
 import { PumpingLab } from '@/components/labs/pumping-lab'
+import { MinimizeLab } from '@/components/labs/minimize-lab'
+import { CykLab } from '@/components/labs/cyk-lab'
+import { PcpLab } from '@/components/labs/pcp-lab'
+import { ReductionMapLab } from '@/components/labs/reduction-map-lab'
 import {
   Callout,
   Definition,
@@ -23,6 +27,80 @@ import {
 
 export function LessonBody({ topicId }: { topicId: string }) {
   switch (topicId) {
+    /* --------------------------- Math Foundations ----------------------------- */
+    case 'math-prelims':
+      return (
+        <>
+          <Lead>
+            Before machines, a shared vocabulary. Everything in the theory is
+            built from sets, sequences, functions, and graphs.
+          </Lead>
+          <Definition term="The essentials">
+            <ul className="ml-1 mt-1 space-y-1.5 text-sm">
+              <li>
+                A <strong>set</strong> is an unordered collection; a{' '}
+                <strong>sequence</strong> (or tuple) is ordered.
+              </li>
+              <li>
+                An <strong>alphabet</strong> <M>Σ</M> is a finite set of symbols;
+                a <strong>string</strong> is a finite sequence over <M>Σ</M>.
+              </li>
+              <li>
+                A <strong>language</strong> is a set of strings — a subset of{' '}
+                <M>Σ*</M>, the set of all strings.
+              </li>
+              <li>
+                A <strong>function</strong> <M>f : A → B</M> maps each input to
+                one output; a <strong>relation</strong> relates elements more
+                freely.
+              </li>
+            </ul>
+          </Definition>
+          <P>
+            The empty string <M>ε</M> has length 0. The set <M>Σ*</M> is
+            infinite, but every individual string in it is finite — a small
+            distinction that quietly powers many later arguments.
+          </P>
+          <Callout kind="tip" title="Why languages?">
+            Recasting every computational problem as “is this string in this
+            language?” lets one theory cover parsing, arithmetic, graph
+            problems, and logic all at once.
+          </Callout>
+        </>
+      )
+    case 'math-proofs':
+      return (
+        <>
+          <Lead>
+            Three proof techniques carry almost the entire subject. Recognizing
+            which one a theorem calls for is half the battle.
+          </Lead>
+          <H3>Proof by construction</H3>
+          <P>
+            To show something exists, build it. Most “X and Y are equivalent”
+            results — NFA→DFA, regex→NFA, CFG→PDA — are constructions you can run
+            by hand.
+          </P>
+          <H3>Proof by contradiction</H3>
+          <P>
+            Assume the opposite of the claim and derive an impossibility. The
+            pumping lemma and the undecidability of the halting problem both land
+            this way.
+          </P>
+          <H3>Proof by induction</H3>
+          <P>
+            Prove a base case, then show each case follows from the previous one.
+            Indispensable for reasoning about strings, runs of a machine, and
+            recursively defined objects.
+          </P>
+          <Callout kind="tip" title="Diagonalization, a preview">
+            A specialized contradiction argument — building an object that
+            differs from every item on a list — reappears for both
+            undecidability and the time/space hierarchy theorems.
+          </Callout>
+        </>
+      )
+
     /* ----------------------------- Finite Automata ---------------------------- */
     case 'fa-intro':
       return (
@@ -257,6 +335,48 @@ export function LessonBody({ topicId }: { topicId: string }) {
           </P>
         </>
       )
+    case 're-equiv':
+      return (
+        <>
+          <Lead>
+            Kleene&apos;s theorem says regular expressions and finite automata
+            describe the same languages. The proof is two constructions that run
+            in both directions.
+          </Lead>
+          <H3>Regex → NFA (Thompson&apos;s construction)</H3>
+          <P>
+            Build the NFA recursively from the structure of the expression. Each
+            operator has a small gadget with fresh start and accept states wired
+            together by <M>ε</M>-transitions:
+          </P>
+          <ul className="ml-1 space-y-1.5 text-sm">
+            <li>
+              <M>a</M> — one arrow labeled <M>a</M>
+            </li>
+            <li>
+              <M>R₁ ∪ R₂</M> — branch into both gadgets with <M>ε</M>-moves
+            </li>
+            <li>
+              <M>R₁ ∘ R₂</M> — wire R₁&apos;s accept to R₂&apos;s start
+            </li>
+            <li>
+              <M>R*</M> — loop the accept back to the start, and allow skipping
+            </li>
+          </ul>
+          <H3>DFA → Regex (state elimination)</H3>
+          <P>
+            Convert the automaton into a <strong>GNFA</strong> whose edges carry
+            regular expressions, then rip out states one at a time, relabeling
+            the edges that routed through each removed state. When only the start
+            and accept states remain, the single edge between them is the answer.
+          </P>
+          <Formula>regex ⟶ NFA ⟶ DFA ⟶ regex</Formula>
+          <Callout kind="tip" title="The payoff">
+            Three formalisms, provably one class of languages. You can always
+            move to whichever representation makes the current problem easiest.
+          </Callout>
+        </>
+      )
     case 're-lab':
       return (
         <>
@@ -266,6 +386,52 @@ export function LessonBody({ topicId }: { topicId: string }) {
             star.
           </Lead>
           <RegexLab />
+        </>
+      )
+
+    /* ---------------------------- Minimization --------------------------------- */
+    case 'min-intro':
+      return (
+        <>
+          <Lead>
+            Among all DFAs recognizing a language, one is smallest — and it is
+            unique. The key idea is when two states can be told apart.
+          </Lead>
+          <Definition term="Distinguishable states">
+            <P>
+              States <M>p</M> and <M>q</M> are <strong>distinguishable</strong>{' '}
+              if some string <M>w</M> drives one to an accept state and the other
+              to a reject state. If no such <M>w</M> exists, they are{' '}
+              <strong>equivalent</strong> and can be merged.
+            </P>
+          </Definition>
+          <P>
+            Partition refinement starts by separating accepting from
+            non-accepting states, then repeatedly splits any group whose members
+            transition into different groups. When nothing splits further, each
+            remaining group becomes a single state of the minimal DFA.
+          </P>
+          <Callout kind="tip" title="Myhill–Nerode, informally">
+            The number of states in the minimal DFA equals the number of classes
+            the language carves <M>Σ*</M> into — a finite count exactly when the
+            language is regular.
+          </Callout>
+        </>
+      )
+    case 'min-lab':
+      return (
+        <>
+          <Lead>
+            Take a deliberately bloated DFA and watch partition refinement
+            discover which states are redundant, collapsing them into the unique
+            minimal machine.
+          </Lead>
+          <MinimizeLab />
+          <P>
+            Each refinement step asks the same question of every group: do all
+            its states agree on which group each symbol leads to? If not, the
+            group splits. Stable groups are the states of the minimal DFA.
+          </P>
         </>
       )
 
@@ -397,6 +563,95 @@ export function LessonBody({ topicId }: { topicId: string }) {
           </Callout>
         </>
       )
+    case 'cnf-intro':
+      return (
+        <>
+          <Lead>
+            Parsing is easiest when every rule has a fixed shape. Chomsky normal
+            form rewrites any context-free grammar into exactly two rule types.
+          </Lead>
+          <Definition term="Chomsky normal form">
+            <P>Every rule is one of:</P>
+            <ul className="ml-1 mt-2 space-y-1.5 text-sm">
+              <li>
+                <M>A → BC</M> — two variables (neither the start symbol)
+              </li>
+              <li>
+                <M>A → a</M> — a single terminal
+              </li>
+              <li>
+                <M>S → ε</M> — only the start symbol may derive the empty string
+              </li>
+            </ul>
+          </Definition>
+          <P>
+            Any CFG can be converted by adding a new start symbol and then
+            eliminating <M>ε</M>-rules, unit rules, and long right-hand sides.
+            The language is unchanged; only the shape of the derivations is.
+          </P>
+          <Callout kind="tip" title="Why bother?">
+            With binary rules, a derivation of a length-<M>n</M> string takes
+            exactly <M>2n − 1</M> steps — a bound that makes the CYK parsing
+            algorithm possible.
+          </Callout>
+        </>
+      )
+    case 'cyk-lab':
+      return (
+        <>
+          <Lead>
+            CYK decides membership by dynamic programming. Each cell records
+            which variables can generate a given substring; the answer is whether
+            the start symbol reaches the top.
+          </Lead>
+          <CykLab />
+          <P>
+            Length-1 cells come straight from the <M>A → a</M> rules. Each longer
+            cell tries every split of its substring into two parts, looking for a
+            rule <M>A → BC</M> with <M>B</M> on the left piece and <M>C</M> on
+            the right. The top cell spans the whole string.
+          </P>
+          <Callout kind="tip" title="Cubic time">
+            With <M>O(n²)</M> cells and <M>O(n)</M> splits each, CYK runs in{' '}
+            <M>O(n³)</M> — proof that every context-free language is decidable
+            efficiently.
+          </Callout>
+        </>
+      )
+    case 'cfl-pumping':
+      return (
+        <>
+          <Lead>
+            Context-free languages have their own pumping lemma — but with{' '}
+            <em>two</em> pumpable pieces, reflecting a parse tree&apos;s repeated
+            variable.
+          </Lead>
+          <Definition term="Pumping lemma for CFLs">
+            <P>
+              If <M>A</M> is context-free, there is a length <M>p</M> such that
+              every <M>s ∈ A</M> with <M>|s| ≥ p</M> splits as{' '}
+              <M>s = uvxyz</M> where:
+            </P>
+            <ul className="ml-1 mt-2 space-y-1.5 text-sm">
+              <li>
+                <M>uvⁱxyⁱz ∈ A</M> for all <M>i ≥ 0</M>
+              </li>
+              <li>
+                <M>|vy| {'>'} 0</M> and <M>|vxy| ≤ p</M>
+              </li>
+            </ul>
+          </Definition>
+          <P>
+            A tall enough parse tree must repeat a variable on some root-to-leaf
+            path. The subtree between the two copies is what gets pumped — on
+            both sides at once.
+          </P>
+          <Callout kind="warning" title="A language that escapes">
+            <M>{'{ aⁿbⁿcⁿ }'}</M> is not context-free: pumping two of the three
+            blocks always leaves the third behind, breaking the equal counts.
+          </Callout>
+        </>
+      )
 
     /* ------------------------------ Turing Machines ---------------------------- */
     case 'tm-intro':
@@ -436,6 +691,35 @@ export function LessonBody({ topicId }: { topicId: string }) {
             Run the <M>{'{ 0ⁿ1ⁿ }'}</M> decider on <M>000111</M> and step slowly:
             you can see it cross off a 0 (→x) and its matching 1 (→y) on each
             sweep across the tape.
+          </Callout>
+        </>
+      )
+    case 'tm-variants':
+      return (
+        <>
+          <Lead>
+            We can add tapes, add nondeterminism, or restrict movement — and the
+            class of recognizable languages never changes. The basic Turing
+            machine is remarkably robust.
+          </Lead>
+          <H3>Multitape machines</H3>
+          <P>
+            A <M>k</M>-tape TM has several tapes with independent heads. It is
+            often far more convenient to program, yet a single-tape machine can
+            simulate it by storing all tapes interleaved on one — with only a
+            polynomial slowdown.
+          </P>
+          <H3>Nondeterministic machines</H3>
+          <P>
+            An NTM may branch into several moves at once and accepts if{' '}
+            <em>any</em> branch accepts. A deterministic machine simulates it by
+            searching the tree of branches breadth-first.
+          </P>
+          <Formula>single-tape ≡ multitape ≡ nondeterministic</Formula>
+          <Callout kind="tip" title="Robustness = the thesis">
+            This insensitivity to the details is exactly why the Church–Turing
+            thesis is believable: every reasonable model lands on the same class
+            of computable functions.
           </Callout>
         </>
       )
@@ -500,6 +784,163 @@ export function LessonBody({ topicId }: { topicId: string }) {
             diagonal describes a behavior that disagrees with row{' '}
             <M>i</M> at column <M>i</M>, so it equals no machine in the list.
           </P>
+        </>
+      )
+
+    /* -------------------------------- Reducibility ----------------------------- */
+    case 'red-mapping':
+      return (
+        <>
+          <Lead>
+            Reducibility is how undecidability spreads. If we could solve{' '}
+            <M>B</M>, and solving <M>A</M> reduces to solving <M>B</M>, then{' '}
+            <M>A</M> is solvable too — so if <M>A</M> is known unsolvable, so is{' '}
+            <M>B</M>.
+          </Lead>
+          <Definition term="Mapping reducibility">
+            <P>
+              <M>A ≤ₘ B</M> if there is a computable function <M>f</M> with
+            </P>
+            <Formula>w ∈ A ⟺ f(w) ∈ B</Formula>
+            <P className="mt-2">
+              If <M>A ≤ₘ B</M> and <M>B</M> is decidable, then <M>A</M> is
+              decidable. Contrapositive: if <M>A</M> is undecidable, so is{' '}
+              <M>B</M>.
+            </P>
+          </Definition>
+          <P>
+            Almost every undecidability proof after the halting problem is a
+            reduction from <M>Aᴛᴍ</M>: transform a machine-and-input question
+            into an instance of the new problem so that yes maps to yes.
+          </P>
+          <Callout kind="tip" title="Same idea, new altitude">
+            Polynomial-time reductions reuse this exact move in complexity
+            theory to define NP-completeness — only with a running-time budget.
+          </Callout>
+        </>
+      )
+    case 'rice':
+      return (
+        <>
+          <Lead>
+            How much is undecidable? Rice&apos;s theorem gives a sweeping answer:
+            essentially every interesting question about what a program{' '}
+            <em>does</em> is undecidable.
+          </Lead>
+          <Definition term="Rice’s theorem">
+            <P>
+              Any <strong>nontrivial</strong> property of the language recognized
+              by a Turing machine is undecidable. “Nontrivial” means some
+              machines have the property and some do not.
+            </P>
+          </Definition>
+          <P>
+            Does this program ever output 42? Compute a constant function?
+            Recognize a regular language? All undecidable — because each is a
+            nontrivial property of the machine&apos;s behavior, and each reduces
+            from <M>Aᴛᴍ</M>.
+          </P>
+          <Callout kind="warning" title="Behavior, not syntax">
+            Rice&apos;s theorem is about the <em>language</em> a machine
+            recognizes, not its source code. Syntactic questions — “does it have
+            5 states?” — can of course be decided.
+          </Callout>
+        </>
+      )
+    case 'pcp-intro':
+      return (
+        <>
+          <Lead>
+            Undecidability is not confined to questions about machines. The Post
+            Correspondence Problem is a simple puzzle about strings that is
+            nonetheless impossible to solve in general.
+          </Lead>
+          <Definition term="Post Correspondence Problem">
+            <P>
+              Given a finite collection of dominoes, each with a top and bottom
+              string, is there a non-empty sequence (repeats allowed) whose
+              concatenated tops equal its concatenated bottoms?
+            </P>
+          </Definition>
+          <P>
+            One can encode the entire computation history of a Turing machine as
+            a PCP instance, so that a matching sequence exists exactly when the
+            machine accepts. That reduction makes PCP undecidable.
+          </P>
+          <Callout kind="tip" title="Try the lab next">
+            Small instances are fun to solve by hand — but notice there is no
+            bound telling you when to give up. That missing bound is the whole
+            difficulty.
+          </Callout>
+        </>
+      )
+    case 'pcp-lab':
+      return (
+        <>
+          <Lead>
+            Build a match by stacking dominoes. The tops and bottoms must spell
+            the same string — keep them aligned and watch the green prefix grow.
+          </Lead>
+          <PcpLab />
+          <P>
+            A choice that looks good locally can strand you with an overhang that
+            never resolves. There is no general algorithm to decide, in advance,
+            whether a given pile of dominoes can ever match.
+          </P>
+        </>
+      )
+
+    /* --------------------------- Advanced Computability ------------------------ */
+    case 'recursion-thm':
+      return (
+        <>
+          <Lead>
+            Can a program use its own source code? The recursion theorem says yes
+            — any machine can obtain its own description and compute with it, with
+            no paradox.
+          </Lead>
+          <Definition term="Recursion theorem">
+            <P>
+              For any computable <M>t(x, y)</M> there is a machine <M>R</M> that,
+              on input <M>w</M>, computes <M>t(⟨R⟩, w)</M> — that is, <M>R</M>{' '}
+              has access to its own description <M>⟨R⟩</M>.
+            </P>
+          </Definition>
+          <P>
+            This legitimizes self-reference as a programming technique. It gives a
+            one-line proof that <M>Aᴛᴍ</M> is undecidable, and it is the reason
+            quines (programs that print themselves) must exist.
+          </P>
+          <Callout kind="tip" title="No magic">
+            Obtaining your own description is a computable operation — the
+            theorem simply guarantees the fixed point always exists.
+          </Callout>
+        </>
+      )
+    case 'kolmogorov':
+      return (
+        <>
+          <Lead>
+            What is the information content of a string? Kolmogorov complexity
+            measures it by the length of the shortest program that prints it.
+          </Lead>
+          <Definition term="Kolmogorov complexity">
+            <P>
+              <M>K(x)</M> is the length of the shortest description (program)
+              that outputs <M>x</M> and halts. A string is{' '}
+              <strong>incompressible</strong> if <M>K(x) ≥ |x|</M>.
+            </P>
+          </Definition>
+          <P>
+            A simple counting argument shows most strings are incompressible:
+            there are not enough short programs to name them all. Yet{' '}
+            <M>K</M> itself is uncomputable — you can never be sure you have found
+            the shortest description.
+          </P>
+          <Callout kind="tip" title="Randomness defined">
+            Incompressibility gives a rigorous meaning to “random”: a string is
+            random when its shortest description is essentially itself.
+          </Callout>
         </>
       )
 
@@ -569,6 +1010,174 @@ export function LessonBody({ topicId }: { topicId: string }) {
             general way to find one without, in the worst case, exponential
             search. That gap is the million-dollar question.
           </P>
+        </>
+      )
+
+    case 'redmap-lab':
+      return (
+        <>
+          <Lead>
+            NP-completeness travels by reduction. Here is the classic one:
+            turning a Boolean formula into a graph so that a satisfying
+            assignment becomes a clique.
+          </Lead>
+          <ReductionMapLab />
+          <P>
+            Each clause contributes three vertices; we connect vertices in
+            different clauses that do not contradict each other. Choosing one
+            true literal per clause picks a vertex per clause — and because none
+            contradict, they are all mutually connected, forming a{' '}
+            <M>k</M>-clique.
+          </P>
+          <Callout kind="tip" title="Why it matters">
+            A polynomial-time map from 3SAT to CLIQUE means CLIQUE is at least as
+            hard as 3SAT. Chaining such reductions from SAT is how thousands of
+            problems were shown NP-complete.
+          </Callout>
+        </>
+      )
+
+    /* ----------------------------- Space Complexity ---------------------------- */
+    case 'space-intro':
+      return (
+        <>
+          <Lead>
+            Time is not the only resource. Space complexity counts the tape cells
+            a machine uses — and because memory can be reused, space behaves very
+            differently from time.
+          </Lead>
+          <Definition term="PSPACE">
+            <P>
+              <M>PSPACE</M> is the class of languages decidable by a Turing
+              machine using a polynomial amount of tape, with no limit on time.
+            </P>
+          </Definition>
+          <Formula>P ⊆ NP ⊆ PSPACE ⊆ EXPTIME</Formula>
+          <P>
+            Many two-player games are PSPACE-complete: deciding whether the first
+            player has a winning strategy in generalized geography or Go-style
+            games captures the alternation of “there exists a move such that for
+            all replies…”.
+          </P>
+          <Callout kind="tip" title="Quantifiers as memory">
+            <M>TQBF</M> — true quantified Boolean formulas — is the canonical
+            PSPACE-complete problem, the space-bounded analogue of SAT.
+          </Callout>
+        </>
+      )
+    case 'savitch':
+      return (
+        <>
+          <Lead>
+            For time, nondeterminism might give an exponential edge (the P vs NP
+            question). For space, Savitch&apos;s theorem shows the gap is only
+            quadratic.
+          </Lead>
+          <Definition term="Savitch’s theorem">
+            <Formula>NSPACE(f(n)) ⊆ SPACE(f(n)²)</Formula>
+            <P className="mt-2">
+              In particular <M>NPSPACE = PSPACE</M>: nondeterministic polynomial
+              space is no more powerful than deterministic polynomial space.
+            </P>
+          </Definition>
+          <P>
+            The proof solves <M>st</M>-connectivity with a recursive
+            “can we get from <M>a</M> to <M>b</M> in <M>2ᵏ</M> steps?” procedure
+            that reuses the same space across both halves of the path — trading
+            time for a quadratic blow-up in space.
+          </P>
+          <Callout kind="tip" title="Reuse is the secret">
+            You cannot reuse time, but you can erase and reuse memory. That single
+            asymmetry is why the space hierarchy looks so different.
+          </Callout>
+        </>
+      )
+    case 'l-nl':
+      return (
+        <>
+          <Lead>
+            Shrink the budget to <em>logarithmic</em> space and a delicate world
+            appears — just enough memory for a constant number of pointers into
+            the input.
+          </Lead>
+          <Definition term="L and NL">
+            <P>
+              <M>L</M> is deterministic log-space; <M>NL</M> is nondeterministic
+              log-space. The directed <M>st</M>-connectivity problem is
+              NL-complete.
+            </P>
+          </Definition>
+          <P>
+            The <strong>Immerman–Szelepcsényi theorem</strong> proved the
+            startling <M>NL = coNL</M>: nondeterministic space classes are closed
+            under complement, something still unknown for time classes like NP.
+          </P>
+          <Formula>L ⊆ NL = coNL ⊆ P</Formula>
+          <Callout kind="tip" title="Counting trick">
+            The proof nondeterministically counts exactly how many vertices are
+            reachable, which lets a machine certify <em>non</em>-reachability too.
+          </Callout>
+        </>
+      )
+
+    /* ------------------------------ Intractability ----------------------------- */
+    case 'hierarchy-thm':
+      return (
+        <>
+          <Lead>
+            Does more time or space actually buy more computational power? The
+            hierarchy theorems answer yes — provably, via diagonalization.
+          </Lead>
+          <Definition term="Time hierarchy theorem">
+            <P>
+              For reasonable (time-constructible) bounds, there are languages
+              decidable in time <M>O(f(n))</M> but not in any meaningfully
+              smaller time. More resources ⇒ strictly more decidable languages.
+            </P>
+          </Definition>
+          <P>
+            The proof builds a machine that diagonalizes against every machine
+            running within the smaller bound — echoing the halting-problem
+            argument, now counting steps instead of accept/reject.
+          </P>
+          <Callout kind="tip" title="A rare certainty">
+            Unlike P vs NP, these separations are <em>proved</em>. For example{' '}
+            <M>P ⊊ EXPTIME</M> is a theorem, not a conjecture.
+          </Callout>
+        </>
+      )
+    case 'beyond':
+      return (
+        <>
+          <Lead>
+            The map keeps going. Beyond P, NP, and PSPACE lies a rich landscape
+            of complexity classes that refine what “efficient” can mean.
+          </Lead>
+          <H3>Circuits, randomness, interaction</H3>
+          <ul className="ml-1 space-y-1.5 text-sm">
+            <li>
+              <strong>Circuit complexity</strong> — measure hardware size and
+              depth; a possible route to proving lower bounds.
+            </li>
+            <li>
+              <strong>Probabilistic classes (BPP)</strong> — allow coin flips and
+              a small error; often fast where determinism struggles.
+            </li>
+            <li>
+              <strong>Interactive proofs (IP = PSPACE)</strong> — a prover
+              convinces a skeptical verifier, the foundation of modern
+              cryptography.
+            </li>
+            <li>
+              <strong>Approximation & PCP</strong> — when exact NP-hard answers
+              are out of reach, how close can we provably get?
+            </li>
+          </ul>
+          <Callout kind="tip" title="Where you are">
+            From a machine with no memory to interactive cryptographic proofs —
+            the same two ideas, simulation and reduction, run through the entire
+            journey.
+          </Callout>
         </>
       )
 

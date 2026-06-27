@@ -250,6 +250,156 @@ export const EXERCISES: ExerciseSet[] = [
       },
     ],
   },
+  {
+    topicId: 'min-intro',
+    questions: [
+      {
+        id: 'min-q1',
+        prompt: 'Two DFA states are distinguishable when…',
+        options: [
+          'they have different names',
+          'some string leads one to accept and the other to reject',
+          'they are both accept states',
+          'they have the same transitions',
+        ],
+        answer: 1,
+        explanation:
+          'Distinguishable means some suffix tells them apart — accept from one, reject from the other. Indistinguishable states can be merged.',
+      },
+      {
+        id: 'min-q2',
+        prompt: 'The minimal DFA for a regular language is…',
+        options: [
+          'never unique',
+          'unique up to renaming states',
+          'always larger than an equivalent NFA',
+          'undefined',
+        ],
+        answer: 1,
+        explanation:
+          'Every regular language has a unique minimal DFA (up to renaming), a consequence of the Myhill–Nerode theorem.',
+      },
+    ],
+  },
+  {
+    topicId: 'cnf-intro',
+    questions: [
+      {
+        id: 'cnf-q1',
+        prompt: 'Which rule shape is allowed in Chomsky normal form?',
+        options: ['A → BCD', 'A → aB', 'A → BC', 'A → ε for any A'],
+        answer: 2,
+        explanation:
+          'CNF permits A → BC (two variables) and A → a (one terminal), plus S → ε only for the start symbol.',
+      },
+      {
+        id: 'cnf-q2',
+        prompt: 'Why convert a grammar to CNF before CYK parsing?',
+        options: [
+          'it makes the language smaller',
+          'binary rules give derivations a fixed length and enable the DP table',
+          'it removes all variables',
+          'it is required for the grammar to be context-free',
+        ],
+        answer: 1,
+        explanation:
+          'Binary right-hand sides let each table cell combine exactly two smaller cells, which is what makes CYK’s O(n³) dynamic program work.',
+      },
+    ],
+  },
+  {
+    topicId: 'red-mapping',
+    questions: [
+      {
+        id: 'redm-q1',
+        prompt: 'If A ≤ₘ B and B is decidable, then…',
+        options: [
+          'A is undecidable',
+          'A is decidable',
+          'B is undecidable',
+          'nothing can be concluded',
+        ],
+        answer: 1,
+        explanation:
+          'A mapping reduction transfers decidability downward: solving B (plus computing f) solves A.',
+      },
+      {
+        id: 'redm-q2',
+        prompt: 'Mapping reductions are most often used to prove a problem is…',
+        options: [
+          'regular',
+          'undecidable, by reducing from Aᴛᴍ',
+          'context-free',
+          'in P',
+        ],
+        answer: 1,
+        explanation:
+          'After Aᴛᴍ is shown undecidable, new undecidability proofs reduce from it: if B were decidable, so would Aᴛᴍ be.',
+      },
+    ],
+  },
+  {
+    topicId: 'rice',
+    questions: [
+      {
+        id: 'rice-q1',
+        prompt: 'Rice’s theorem says that nontrivial properties of…',
+        options: [
+          'a Turing machine’s source code are undecidable',
+          'the language a Turing machine recognizes are undecidable',
+          'finite automata are undecidable',
+          'regular languages are undecidable',
+        ],
+        answer: 1,
+        explanation:
+          'Rice’s theorem is about semantic properties — the recognized language — not syntactic features of the machine itself.',
+      },
+    ],
+  },
+  {
+    topicId: 'space-intro',
+    questions: [
+      {
+        id: 'space-q1',
+        prompt: 'Which containment is known to hold?',
+        options: [
+          'PSPACE ⊆ NP',
+          'P ⊆ NP ⊆ PSPACE',
+          'PSPACE ⊆ P',
+          'EXPTIME ⊆ P',
+        ],
+        answer: 1,
+        explanation:
+          'P ⊆ NP ⊆ PSPACE ⊆ EXPTIME. Whether any of these containments is strict (besides P ⊊ EXPTIME) is largely open.',
+      },
+      {
+        id: 'space-q2',
+        prompt: 'The canonical PSPACE-complete problem is…',
+        options: ['SAT', 'TQBF (true quantified Boolean formulas)', 'CLIQUE', 'st-connectivity'],
+        answer: 1,
+        explanation:
+          'TQBF — fully quantified Boolean formulas — is to PSPACE what SAT is to NP.',
+      },
+    ],
+  },
+  {
+    topicId: 'savitch',
+    questions: [
+      {
+        id: 'sav-q1',
+        prompt: 'Savitch’s theorem establishes that…',
+        options: [
+          'NPSPACE = PSPACE',
+          'P = NP',
+          'NL = P',
+          'space cannot be reused',
+        ],
+        answer: 0,
+        explanation:
+          'NSPACE(f) ⊆ SPACE(f²), so nondeterministic polynomial space collapses to deterministic: NPSPACE = PSPACE.',
+      },
+    ],
+  },
 ]
 
 export function exercisesFor(topicId: string): ExerciseSet | undefined {

@@ -17,6 +17,10 @@ export interface Topic {
     | 'pda'
     | 'reduction'
     | 'sat'
+    | 'minimize'
+    | 'cyk'
+    | 'pcp'
+    | 'redmap'
 }
 
 export interface Module {
@@ -31,6 +35,26 @@ export interface Module {
 }
 
 export const CURRICULUM: Module[] = [
+  {
+    id: 'math-foundations',
+    chapter: 'Chapter 0',
+    title: 'Mathematical Foundations',
+    summary:
+      'The vocabulary the whole theory is written in: sets, sequences, functions, relations, graphs — and the handful of proof techniques used everywhere.',
+    part: 'Automata & Languages',
+    topics: [
+      {
+        id: 'math-prelims',
+        title: 'Sets, sequences & functions',
+        blurb: 'The objects we compute over and the notation for them.',
+      },
+      {
+        id: 'math-proofs',
+        title: 'Proof techniques',
+        blurb: 'Construction, contradiction, and induction — the working toolkit.',
+      },
+    ],
+  },
   {
     id: 'finite-automata',
     chapter: 'Chapter 1.1',
@@ -109,10 +133,36 @@ export const CURRICULUM: Module[] = [
         blurb: 'Union, concatenation, and star — building languages up.',
       },
       {
+        id: 're-equiv',
+        title: 'Equivalence with finite automata',
+        blurb: 'Thompson’s construction and GNFA state elimination — Kleene’s theorem.',
+      },
+      {
         id: 're-lab',
         title: 'Lab: Regex playground',
         blurb: 'Test strings against a regular expression interactively.',
         lab: 'regex',
+      },
+    ],
+  },
+  {
+    id: 'minimization',
+    chapter: 'Chapter 1 · Minimization',
+    title: 'DFA Minimization',
+    summary:
+      'Every regular language has a unique smallest DFA. Partition refinement finds it by merging states no string can tell apart.',
+    part: 'Automata & Languages',
+    topics: [
+      {
+        id: 'min-intro',
+        title: 'Distinguishable states',
+        blurb: 'When two states are equivalent, and why a minimal DFA is unique.',
+      },
+      {
+        id: 'min-lab',
+        title: 'Lab: Minimize a DFA',
+        blurb: 'Watch partition refinement merge equivalent states step by step.',
+        lab: 'minimize',
       },
     ],
   },
@@ -167,6 +217,22 @@ export const CURRICULUM: Module[] = [
         blurb: 'Step a PDA across its input and watch the stack grow and shrink.',
         lab: 'pda',
       },
+      {
+        id: 'cnf-intro',
+        title: 'Chomsky normal form',
+        blurb: 'Rewriting any CFG into A → BC and A → a rules for clean parsing.',
+      },
+      {
+        id: 'cyk-lab',
+        title: 'Lab: CYK parsing',
+        blurb: 'Fill the dynamic-programming table that decides membership in cubic time.',
+        lab: 'cyk',
+      },
+      {
+        id: 'cfl-pumping',
+        title: 'Pumping lemma for CFLs',
+        blurb: 'Two pumpable substrings — proving languages are not context-free.',
+      },
     ],
   },
   {
@@ -187,6 +253,11 @@ export const CURRICULUM: Module[] = [
         title: 'Lab: Run a Turing machine',
         blurb: 'Step a TM across its tape and watch it compute.',
         lab: 'turing',
+      },
+      {
+        id: 'tm-variants',
+        title: 'Variants of Turing machines',
+        blurb: 'Multitape and nondeterministic TMs — all equivalent in power.',
       },
     ],
   },
@@ -217,6 +288,57 @@ export const CURRICULUM: Module[] = [
     ],
   },
   {
+    id: 'reducibility',
+    chapter: 'Chapter 5',
+    title: 'Reducibility',
+    summary:
+      'The central technique for spreading undecidability: if solving B would let us solve a known-hard A, then B is hard too.',
+    part: 'Computability Theory',
+    topics: [
+      {
+        id: 'red-mapping',
+        title: 'Mapping reducibility',
+        blurb: 'A computable function f with w ∈ A ⟺ f(w) ∈ B, written A ≤ₘ B.',
+      },
+      {
+        id: 'rice',
+        title: 'Rice’s theorem',
+        blurb: 'Every nontrivial property of a TM’s language is undecidable.',
+      },
+      {
+        id: 'pcp-intro',
+        title: 'The Post Correspondence Problem',
+        blurb: 'A deceptively simple domino-matching puzzle that is undecidable.',
+      },
+      {
+        id: 'pcp-lab',
+        title: 'Lab: PCP puzzle',
+        blurb: 'Match tops and bottoms by hand, then reveal a computer-found solution.',
+        lab: 'pcp',
+      },
+    ],
+  },
+  {
+    id: 'advanced-computability',
+    chapter: 'Chapter 6',
+    title: 'Advanced Computability',
+    summary:
+      'Self-reference made rigorous: machines that print themselves, and an absolute notion of information content.',
+    part: 'Computability Theory',
+    topics: [
+      {
+        id: 'recursion-thm',
+        title: 'The recursion theorem',
+        blurb: 'Any machine can obtain its own description and use it.',
+      },
+      {
+        id: 'kolmogorov',
+        title: 'Kolmogorov complexity',
+        blurb: 'The shortest description of a string, and why most strings are random.',
+      },
+    ],
+  },
+  {
     id: 'complexity',
     chapter: 'Chapter 7',
     title: 'Time Complexity',
@@ -239,6 +361,57 @@ export const CURRICULUM: Module[] = [
         title: 'Lab: SAT & the P vs NP gap',
         blurb: 'Verify a certificate instantly, then watch brute-force search blow up.',
         lab: 'sat',
+      },
+      {
+        id: 'redmap-lab',
+        title: 'Lab: Reduction map (3SAT → CLIQUE)',
+        blurb: 'Turn a Boolean formula into a graph where a clique is a satisfying assignment.',
+        lab: 'redmap',
+      },
+    ],
+  },
+  {
+    id: 'space-complexity',
+    chapter: 'Chapter 8',
+    title: 'Space Complexity',
+    summary:
+      'Measure memory instead of time. Space can be reused, which leads to surprising results like PSPACE = NPSPACE.',
+    part: 'Complexity Theory',
+    topics: [
+      {
+        id: 'space-intro',
+        title: 'Space, PSPACE & games',
+        blurb: 'Reusable memory, the class PSPACE, and PSPACE-complete games.',
+      },
+      {
+        id: 'savitch',
+        title: 'Savitch’s theorem',
+        blurb: 'Nondeterministic space is only quadratically more powerful.',
+      },
+      {
+        id: 'l-nl',
+        title: 'L, NL, and NL = coNL',
+        blurb: 'Logarithmic space, st-connectivity, and the Immerman–Szelepcsényi theorem.',
+      },
+    ],
+  },
+  {
+    id: 'intractability',
+    chapter: 'Chapter 9',
+    title: 'Intractability',
+    summary:
+      'Problems we can prove are genuinely hard. The hierarchy theorems guarantee that more time and space really do buy more power.',
+    part: 'Complexity Theory',
+    topics: [
+      {
+        id: 'hierarchy-thm',
+        title: 'The hierarchy theorems',
+        blurb: 'Diagonalization again: strictly more resources decide strictly more languages.',
+      },
+      {
+        id: 'beyond',
+        title: 'The wider landscape',
+        blurb: 'Circuit, probabilistic, and interactive complexity — where the field goes next.',
       },
     ],
   },
