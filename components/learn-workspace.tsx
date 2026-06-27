@@ -7,7 +7,6 @@ import {
   ArrowRight,
   Check,
   ChevronLeft,
-  Flame,
   FlaskConical,
   Menu,
   X,
@@ -23,6 +22,9 @@ import { AboutDialog } from '@/components/about-dialog'
 import { Quiz } from '@/components/exercise/quiz'
 import { exercisesFor } from '@/lib/exercises'
 import { useProgress } from '@/lib/progress'
+import { XpHud } from '@/components/gamification/xp-hud'
+import { TrophyDialog } from '@/components/gamification/trophy-dialog'
+import { UnlockToasts } from '@/components/gamification/unlock-toasts'
 import { cn } from '@/lib/utils'
 
 export function LearnWorkspace({ initialTopic }: { initialTopic?: string }) {
@@ -31,12 +33,16 @@ export function LearnWorkspace({ initialTopic }: { initialTopic?: string }) {
     initialTopic ?? flat[0].topic.id,
   )
   const [navOpen, setNavOpen] = useState(false)
+  const [trophyOpen, setTrophyOpen] = useState(false)
+  const [restored, setRestored] = useState(false)
   const {
+    ready,
     completed: completedList,
-    streak,
+    lastTopic,
     complete,
     markStudiedToday,
     recordScore,
+    setLastTopic,
   } = useProgress()
   const completed = useMemo(() => new Set(completedList), [completedList])
 
@@ -51,6 +57,21 @@ export function LearnWorkspace({ initialTopic }: { initialTopic?: string }) {
   useEffect(() => {
     markStudiedToday()
   }, [markStudiedToday])
+
+  // Once progress hydrates, resume on the last-viewed topic (unless an
+  // explicit topic was requested via the URL).
+  useEffect(() => {
+    if (!ready || restored) return
+    if (!initialTopic && lastTopic && findTopic(lastTopic)) {
+      setActiveId(lastTopic)
+    }
+    setRestored(true)
+  }, [ready, restored, initialTopic, lastTopic])
+
+  // Persist the current topic so a reload returns the learner here.
+  useEffect(() => {
+    if (restored) setLastTopic(activeId)
+  }, [activeId, restored, setLastTopic])
 
   function go(id: string) {
     complete(activeId)
@@ -182,15 +203,8 @@ export function LearnWorkspace({ initialTopic }: { initialTopic?: string }) {
           <span className="font-mono text-xs text-muted-foreground">
             {found.module.chapter} · {found.module.title}
           </span>
-          {streak > 0 && (
-            <span
-              className="ml-auto inline-flex items-center gap-1.5 rounded-full border border-accent/30 bg-accent/10 px-2.5 py-1 font-mono text-xs font-semibold text-accent"
-              title={`${streak}-day study streak`}
-            >
-              <Flame className="size-3.5" /> {streak}
-            </span>
-          )}
-          <AboutDialog className={streak > 0 ? '' : 'ml-auto'} />
+          <XpHud onOpenTrophies={() => setTrophyOpen(true)} />
+          <AboutDialog />
         </header>
 
         <main className="mx-auto w-full max-w-3xl flex-1 px-5 py-10 lg:px-8 lg:py-14">
@@ -248,6 +262,9 @@ export function LearnWorkspace({ initialTopic }: { initialTopic?: string }) {
           </div>
         </main>
       </div>
+
+      <TrophyDialog open={trophyOpen} onClose={() => setTrophyOpen(false)} />
+      <UnlockToasts />
     </div>
   )
 }

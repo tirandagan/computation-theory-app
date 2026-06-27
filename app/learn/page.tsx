@@ -1,4 +1,5 @@
 import { LearnWorkspace } from '@/components/learn-workspace'
+import { ProgressProvider } from '@/lib/progress'
 
 export default async function LearnPage({
   searchParams,
@@ -6,5 +7,9 @@ export default async function LearnPage({
   searchParams: Promise<{ topic?: string }>
 }) {
   const { topic } = await searchParams
-  return <LearnWorkspace initialTopic={topic} />
+  return (
+    <ProgressProvider>
+      <LearnWorkspace initialTopic={topic} />
+    </ProgressProvider>
+  )
 }
