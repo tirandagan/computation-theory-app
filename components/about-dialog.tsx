@@ -111,6 +111,23 @@ export function AboutDialog({ className }: { className?: string }) {
                   by the author or publisher.
                 </p>
               </div>
+
+              <a
+                href="https://github.com/tirandagan/computation-theory-app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-between gap-2 rounded-xl border border-border bg-background/50 p-4 transition-colors hover:bg-muted"
+              >
+                <span className="flex items-center gap-2">
+                  <Code2 className="size-4 text-foreground" />
+                  <span className="text-sm font-medium text-foreground">
+                    View source on GitHub
+                  </span>
+                </span>
+                <span className="font-mono text-xs text-muted-foreground">
+                  tirandagan/computation-theory-app
+                </span>
+              </a>
             </div>
           </div>
         </div>
