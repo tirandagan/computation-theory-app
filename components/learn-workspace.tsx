@@ -8,6 +8,7 @@ import {
   Check,
   ChevronLeft,
   FlaskConical,
+  Gamepad2,
   Menu,
   X,
 } from 'lucide-react'
@@ -160,7 +161,11 @@ export function LearnWorkspace({ initialTopic }: { initialTopic?: string }) {
                             >
                               {isDone ? <Check className="size-2.5" /> : null}
                               {!isDone && topic.lab ? (
-                                <FlaskConical className="size-2.5" />
+                                topic.lab.endsWith('-game') ? (
+                                  <Gamepad2 className="size-2.5" />
+                                ) : (
+                                  <FlaskConical className="size-2.5" />
+                                )
                               ) : null}
                             </span>
                             <span className="leading-tight">{topic.title}</span>
@@ -208,11 +213,16 @@ export function LearnWorkspace({ initialTopic }: { initialTopic?: string }) {
         </header>
 
         <main className="mx-auto w-full max-w-3xl flex-1 px-5 py-10 lg:px-8 lg:py-14">
-          {found.topic.lab && (
-            <span className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-accent/15 px-3 py-1 font-mono text-xs text-accent">
-              <FlaskConical className="size-3" /> Interactive lab
-            </span>
-          )}
+          {found.topic.lab &&
+            (found.topic.lab.endsWith('-game') ? (
+              <span className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-primary/15 px-3 py-1 font-mono text-xs font-semibold text-primary">
+                <Gamepad2 className="size-3" /> Arcade challenge
+              </span>
+            ) : (
+              <span className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-accent/15 px-3 py-1 font-mono text-xs text-accent">
+                <FlaskConical className="size-3" /> Interactive lab
+              </span>
+            ))}
           <h1 className="mb-8 text-balance font-serif text-4xl tracking-tight text-foreground lg:text-5xl">
             {found.topic.title}
           </h1>

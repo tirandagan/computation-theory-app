@@ -15,6 +15,12 @@ import { MinimizeLab } from '@/components/labs/minimize-lab'
 import { CykLab } from '@/components/labs/cyk-lab'
 import { PcpLab } from '@/components/labs/pcp-lab'
 import { ReductionMapLab } from '@/components/labs/reduction-map-lab'
+import { PumpingGame } from '@/components/games/pumping-game'
+import { GeographyGame } from '@/components/games/geography-game'
+import { DiagonalGame } from '@/components/games/diagonal-game'
+import { ThompsonLab } from '@/components/labs/thompson-lab'
+import { ProductLab } from '@/components/labs/product-lab'
+import { AmbiguityLab } from '@/components/labs/ambiguity-lab'
 import {
   Callout,
   Definition,
@@ -300,6 +306,24 @@ export function LessonBody({ topicId }: { topicId: string }) {
           </Callout>
         </>
       )
+    case 'nfa-product':
+      return (
+        <>
+          <Lead>
+            Regular languages are closed under intersection and union. The proof
+            is a construction: run two DFAs <em>simultaneously</em> by tracking a
+            pair of states — one machine with a state for every combination.
+          </Lead>
+          <ProductLab />
+          <P>
+            The product machine&apos;s states are pairs{' '}
+            <M>(p, q)</M> from the two DFAs, and it reads each symbol in both at
+            once. The <em>only</em> thing that distinguishes intersection from
+            union is which pairs you mark as accepting — both at once, or either
+            one. Same machine, different accept set.
+          </P>
+        </>
+      )
 
     /* ---------------------------- Regular Expressions -------------------------- */
     case 're-intro':
@@ -386,6 +410,24 @@ export function LessonBody({ topicId }: { topicId: string }) {
             star.
           </Lead>
           <RegexLab />
+        </>
+      )
+    case 're-thompson':
+      return (
+        <>
+          <Lead>
+            Kleene&apos;s theorem in motion. Thompson&apos;s construction turns
+            any regular expression into an NFA by gluing together one small
+            gadget per operator. Step through the build and watch the machine
+            grow from the inside out.
+          </Lead>
+          <ThompsonLab />
+          <P>
+            Each gadget has a single start and a single accept state, joined to
+            its neighbors by <M>ε</M>-moves. Because the gadgets compose
+            uniformly, the construction is purely mechanical — exactly what makes
+            it a <em>proof</em> that every regex has an equivalent automaton.
+          </P>
         </>
       )
 
@@ -485,6 +527,24 @@ export function LessonBody({ topicId }: { topicId: string }) {
           </P>
         </>
       )
+    case 'pl-game':
+      return (
+        <>
+          <Lead>
+            The pumping lemma <em>is</em> a two-player game. To prove a language
+            is not regular, you must defeat an adversary who believes it is. Win
+            every round to complete the proof.
+          </Lead>
+          <PumpingGame />
+          <P>
+            The structure of the battle mirrors the logic exactly: the adversary
+            commits to a pumping length <M>p</M> (∀), you choose a long string in
+            the language (∃), the adversary splits it into <M>xyz</M> (∀), and you
+            pick a pump count <M>i</M> that kicks the string out of the language
+            (∃). A winning strategy for you <em>is</em> the proof.
+          </P>
+        </>
+      )
 
     /* ---------------------------- Context-Free --------------------------------- */
     case 'cfg-intro':
@@ -525,6 +585,23 @@ export function LessonBody({ topicId }: { topicId: string }) {
             <M>(()</M>. The first builds a clean nested tree; the second simply
             cannot be derived.
           </Callout>
+        </>
+      )
+    case 'cfg-ambiguity':
+      return (
+        <>
+          <Lead>
+            A grammar is <em>ambiguous</em> if some string has more than one
+            parse tree. That is not a cosmetic problem: different trees can mean
+            different things — different operator precedence, different values.
+          </Lead>
+          <AmbiguityLab />
+          <P>
+            The expression grammar <M>E → E + E | E * E | a</M> is the textbook
+            example. Because it never says whether <M>+</M> or <M>*</M> binds
+            tighter, the parser is free to group either way. Real compilers
+            rewrite the grammar into layers to force a single tree.
+          </P>
         </>
       )
     case 'pda-intro':
@@ -783,6 +860,23 @@ export function LessonBody({ topicId }: { topicId: string }) {
             a row and every machine&apos;s description as a column. The flipped
             diagonal describes a behavior that disagrees with row{' '}
             <M>i</M> at column <M>i</M>, so it equals no machine in the list.
+          </P>
+        </>
+      )
+    case 'dec-game':
+      return (
+        <>
+          <Lead>
+            Your mission: construct a language that no machine on the list can
+            decide. Walk down the diagonal and flip each machine&apos;s own
+            answer — when you reach the bottom, you hold the impossible.
+          </Lead>
+          <DiagonalGame />
+          <P>
+            By flipping the diagonal, the language you build differs from machine{' '}
+            <M>Mᵢ</M> precisely on input <M>i</M>. So it cannot be any of them —
+            and since the list contains <em>every</em> machine, no machine decides
+            it. That is the whole undecidability argument, made by hand.
           </P>
         </>
       )
@@ -1063,6 +1157,24 @@ export function LessonBody({ topicId }: { topicId: string }) {
             <M>TQBF</M> — true quantified Boolean formulas — is the canonical
             PSPACE-complete problem, the space-bounded analogue of SAT.
           </Callout>
+        </>
+      )
+    case 'space-game':
+      return (
+        <>
+          <Lead>
+            Generalized Geography is a two-player game played on a directed graph
+            — and deciding who wins is PSPACE-complete. Take turns extending a
+            path; whoever cannot move loses. Can you beat a perfect opponent?
+          </Lead>
+          <GeographyGame />
+          <P>
+            Why PSPACE? A winning strategy means &ldquo;there exists a move such
+            that for all replies, there exists a move…&rdquo; — alternating
+            quantifiers of unbounded depth, exactly the structure of{' '}
+            <M>TQBF</M>. Searching that game tree needs only polynomial space
+            (reuse it across branches) but potentially exponential time.
+          </P>
         </>
       )
     case 'savitch':

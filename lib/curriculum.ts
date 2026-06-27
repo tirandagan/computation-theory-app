@@ -21,6 +21,12 @@ export interface Topic {
     | 'cyk'
     | 'pcp'
     | 'redmap'
+    | 'pumping-game'
+    | 'geography-game'
+    | 'diagonal-game'
+    | 'thompson'
+    | 'product'
+    | 'ambiguity'
 }
 
 export interface Module {
@@ -117,6 +123,12 @@ export const CURRICULUM: Module[] = [
         blurb: 'Animate the subset construction one worklist step at a time.',
         lab: 'subset',
       },
+      {
+        id: 'nfa-product',
+        title: 'Lab: Product construction',
+        blurb: 'Combine two DFAs into one grid machine for intersection and union.',
+        lab: 'product',
+      },
     ],
   },
   {
@@ -142,6 +154,12 @@ export const CURRICULUM: Module[] = [
         title: 'Lab: Regex playground',
         blurb: 'Test strings against a regular expression interactively.',
         lab: 'regex',
+      },
+      {
+        id: 're-thompson',
+        title: 'Lab: Thompson’s construction',
+        blurb: 'Watch a regex assemble into an NFA, one operator gadget at a time.',
+        lab: 'thompson',
       },
     ],
   },
@@ -185,6 +203,12 @@ export const CURRICULUM: Module[] = [
         blurb: 'Decompose a string into xyz and pump the middle.',
         lab: 'pumping',
       },
+      {
+        id: 'pl-game',
+        title: 'Game: Pumping Lemma Duel',
+        blurb: 'Battle the adversary turn by turn — break the loop to prove nonregularity.',
+        lab: 'pumping-game',
+      },
     ],
   },
   {
@@ -205,6 +229,12 @@ export const CURRICULUM: Module[] = [
         title: 'Lab: Derive with a grammar',
         blurb: 'Watch a leftmost derivation build a parse tree.',
         lab: 'cfg',
+      },
+      {
+        id: 'cfg-ambiguity',
+        title: 'Lab: Grammar ambiguity',
+        blurb: 'See one string yield two different parse trees in an ambiguous grammar.',
+        lab: 'ambiguity',
       },
       {
         id: 'pda-intro',
@@ -275,6 +305,11 @@ export const CURRICULUM: Module[] = [
         blurb: 'Deciders, recognizers, and what it means to "solve" a problem.',
       },
       {
+        id: 'dec-algorithms',
+        title: 'Decidable problems about automata',
+        blurb: 'A_DFA, E_DFA, EQ_DFA and A_CFG — the problems we genuinely can decide.',
+      },
+      {
         id: 'dec-halting',
         title: 'The halting problem',
         blurb: 'A self-referential argument proves Aᵀᴹ is undecidable.',
@@ -284,6 +319,12 @@ export const CURRICULUM: Module[] = [
         title: 'Lab: The halting argument',
         blurb: 'Step through diagonalization and the self-reference contradiction.',
         lab: 'reduction',
+      },
+      {
+        id: 'dec-game',
+        title: 'Game: Build the Impossible Machine',
+        blurb: 'Flip the diagonal to construct a language no machine on the list can decide.',
+        lab: 'diagonal-game',
       },
     ],
   },
@@ -336,6 +377,11 @@ export const CURRICULUM: Module[] = [
         title: 'Kolmogorov complexity',
         blurb: 'The shortest description of a string, and why most strings are random.',
       },
+      {
+        id: 'godel',
+        title: 'Gödel & the limits of proof',
+        blurb: 'Why no consistent, powerful proof system can prove every true statement.',
+      },
     ],
   },
   {
@@ -355,6 +401,11 @@ export const CURRICULUM: Module[] = [
         id: 'np-complete',
         title: 'NP-completeness',
         blurb: 'The hardest problems in NP and the Cook–Levin theorem.',
+      },
+      {
+        id: 'np-catalog',
+        title: 'The NP-complete zoo',
+        blurb: 'CLIQUE, VERTEX-COVER, HAMPATH, SUBSET-SUM — and how reductions connect them.',
       },
       {
         id: 'np-lab',
@@ -382,6 +433,12 @@ export const CURRICULUM: Module[] = [
         id: 'space-intro',
         title: 'Space, PSPACE & games',
         blurb: 'Reusable memory, the class PSPACE, and PSPACE-complete games.',
+      },
+      {
+        id: 'space-game',
+        title: 'Game: Generalized Geography',
+        blurb: 'Play a PSPACE-complete game on a graph against a perfect opponent.',
+        lab: 'geography-game',
       },
       {
         id: 'savitch',
