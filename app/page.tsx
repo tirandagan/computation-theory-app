@@ -199,12 +199,8 @@ export default function HomePage() {
       </section>
 
       <footer className="border-t border-border">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-6 py-8 text-sm text-muted-foreground sm:flex-row">
+        <div className="mx-auto flex max-w-6xl items-center justify-center px-6 py-8 text-sm text-muted-foreground">
           <span className="font-mono">Automata · an interactive course</span>
-          <span>
-            Inspired by Michael Sipser,{' '}
-            <em>Introduction to the Theory of Computation</em>
-          </span>
         </div>
       </footer>
     </main>
