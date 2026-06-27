@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react'
 import type { Automaton } from '@/lib/automata'
+import { PinchZoom } from '@/components/ui/pinch-zoom'
 
 const R = 28 // state radius
 
@@ -54,6 +55,7 @@ export function AutomatonGraph({
   const activeSet = new Set(active)
 
   return (
+    <PinchZoom>
     <svg
       viewBox={`0 0 ${width} ${height}`}
       className="h-auto w-full select-none"
@@ -239,5 +241,6 @@ export function AutomatonGraph({
         )
       })}
     </svg>
+    </PinchZoom>
   )
 }
