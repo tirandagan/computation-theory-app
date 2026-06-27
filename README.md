@@ -151,5 +151,3 @@ The course is **data-driven**: `lib/curriculum.ts` describes the entire syllabus
 **Created by Tiran Dagan** — PhD Candidate, Stevens Institute of Technology · `tdagan@stevens.edu`
 
 Based on **Michael Sipser**, *Introduction to the Theory of Computation*, 3rd Edition (Cengage Learning). All concepts, definitions, and course structure are derived from Professor Sipser's work. This application is an educational companion and is **not affiliated with or endorsed by** the author or publisher.
-
-Built with [v0](https://v0.app). [Continue working on v0 →](https://v0.app/chat/projects/prj_HwNzuk70kEwSfqlo52QOvgtdR7jO)
