@@ -18,6 +18,7 @@ import {
   findTopic,
 } from '@/lib/curriculum'
 import { LessonBody } from '@/components/lesson/content'
+import { AboutDialog } from '@/components/about-dialog'
 import { cn } from '@/lib/utils'
 
 export function LearnWorkspace({ initialTopic }: { initialTopic?: string }) {
@@ -164,6 +165,7 @@ export function LearnWorkspace({ initialTopic }: { initialTopic?: string }) {
           <span className="font-mono text-xs text-muted-foreground">
             {found.module.chapter} · {found.module.title}
           </span>
+          <AboutDialog className="ml-auto" />
         </header>
 
         <main className="mx-auto w-full max-w-3xl flex-1 px-5 py-10 lg:px-8 lg:py-14">

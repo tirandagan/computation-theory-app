@@ -8,6 +8,7 @@ import {
 } from 'lucide-react'
 import { CURRICULUM, PARTS } from '@/lib/curriculum'
 import { HeroAutomaton } from '@/components/landing/hero-automaton'
+import { AboutDialog } from '@/components/about-dialog'
 
 const PART_META: Record<string, { n: string; blurb: string }> = {
   'Automata & Languages': {
@@ -55,12 +56,15 @@ export default function HomePage() {
           </span>
           Automata
         </span>
-        <Link
-          href="/learn"
-          className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80"
-        >
-          Start learning <ArrowRight className="size-4" />
-        </Link>
+        <div className="flex items-center gap-2">
+          <AboutDialog />
+          <Link
+            href="/learn"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80"
+          >
+            Start learning <ArrowRight className="size-4" />
+          </Link>
+        </div>
       </header>
 
       {/* hero */}
