@@ -65,7 +65,7 @@ export function SubsetLab() {
 
       <div className="grid gap-0 lg:grid-cols-[1fr_1fr]">
         {/* source NFA */}
-        <div className="bg-grid border-b border-border p-2 lg:border-b-0 lg:border-r">
+        <div className="bg-grid flex flex-col border-b border-border p-2 lg:border-b-0 lg:border-r">
           <p className="px-2 pt-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
             NFA · {nfa.states.length} states
           </p>

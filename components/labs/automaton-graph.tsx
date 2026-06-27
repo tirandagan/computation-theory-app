@@ -55,7 +55,7 @@ export function AutomatonGraph({
   const activeSet = new Set(active)
 
   return (
-    <PinchZoom>
+    <PinchZoom className="flex min-h-full flex-1 flex-col justify-center">
     <svg
       viewBox={`0 0 ${width} ${height}`}
       className="h-auto w-full select-none"
