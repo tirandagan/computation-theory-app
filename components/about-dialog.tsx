@@ -83,11 +83,14 @@ export function AboutDialog({ className }: { className?: string }) {
                 <p className="mt-2 text-sm font-medium text-foreground">
                   Tiran Dagan
                 </p>
+                <p className="mt-0.5 text-sm text-muted-foreground">
+                  PhD Candidate, Stevens Institute of Technology
+                </p>
                 <a
-                  href="mailto:Tiran@TiranDagan.com"
-                  className="mt-1 inline-flex items-center gap-1.5 text-sm text-primary transition-colors hover:underline"
+                  href="mailto:tdagan@stevens.edu"
+                  className="mt-1.5 inline-flex items-center gap-1.5 text-sm text-primary transition-colors hover:underline"
                 >
-                  <Mail className="size-3.5" /> Tiran@TiranDagan.com
+                  <Mail className="size-3.5" /> tdagan@stevens.edu
                 </a>
               </div>
 
