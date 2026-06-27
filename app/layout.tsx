@@ -18,7 +18,6 @@ export const metadata: Metadata = {
   title: 'Automata — Learn the Theory of Computation',
   description:
     'An interactive course on finite automata, regular expressions, context-free grammars, Turing machines, decidability, and complexity — based on Sipser.',
-  generator: 'v0.app',
 }
 
 export const viewport: Viewport = {
