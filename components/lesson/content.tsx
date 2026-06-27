@@ -765,7 +765,7 @@ export function LessonBody({ topicId }: { topicId: string }) {
           </Lead>
           <TuringLab />
           <Callout kind="tip" title="Try this">
-            Run the <M>{'{ 0ⁿ1ⁿ }'}</M> decider on <M>000111</M> and step slowly:
+            Run the <M>{'{ 0��1ⁿ }'}</M> decider on <M>000111</M> and step slowly:
             you can see it cross off a 0 (→x) and its matching 1 (→y) on each
             sweep across the tape.
           </Callout>
@@ -821,6 +821,46 @@ export function LessonBody({ topicId }: { topicId: string }) {
             Establishing decidability is constructive — we exhibit an algorithm.
             Establishing <em>un</em>decidability requires a cleverer, indirect
             argument: diagonalization.
+          </Callout>
+        </>
+      )
+    case 'dec-algorithms':
+      return (
+        <>
+          <Lead>
+            Before the bad news about undecidability, some good news: a great
+            many natural questions about automata and grammars{' '}
+            <em>are</em> decidable. These are the problems with real algorithms.
+          </Lead>
+          <Definition term="Decidable problems about automata">
+            <ul className="ml-1 mt-1 space-y-1.5 text-sm">
+              <li>
+                <M>A_DFA</M> — does DFA <M>B</M> accept string <M>w</M>? Just
+                simulate <M>B</M> on <M>w</M>.
+              </li>
+              <li>
+                <M>E_DFA</M> — is <M>L(B)</M> empty? Check whether any accept
+                state is reachable from the start.
+              </li>
+              <li>
+                <M>EQ_DFA</M> — do two DFAs recognize the same language? Test the
+                symmetric difference for emptiness.
+              </li>
+              <li>
+                <M>A_CFG</M> — does grammar <M>G</M> generate string <M>w</M>?
+                Convert to CNF and run CYK.
+              </li>
+            </ul>
+          </Definition>
+          <P>
+            The trick is that finite automata and CFGs have enough structure to
+            analyze directly. The line is crossed only when we ask the same
+            questions about <em>Turing machines</em>, whose behavior we cannot
+            fully predict without running them.
+          </P>
+          <Callout kind="tip" title="The boundary">
+            <M>A_DFA</M> is decidable, but <M>A_TM</M> — does a Turing machine
+            accept a string? — is not. Same question, vastly more powerful model.
           </Callout>
         </>
       )
@@ -1037,6 +1077,36 @@ export function LessonBody({ topicId }: { topicId: string }) {
           </Callout>
         </>
       )
+    case 'godel':
+      return (
+        <>
+          <Lead>
+            Computability theory delivers a clean, modern route to Gödel&apos;s
+            famous limits on mathematics: some true statements can never be
+            proved.
+          </Lead>
+          <P>
+            Suppose a proof system is <strong>sound</strong> (it proves only true
+            statements) and its proofs can be checked mechanically. Then we could
+            recognize the provable statements by searching every possible proof in
+            turn.
+          </P>
+          <Definition term="The argument in one line">
+            <P>
+              If every true statement were provable, that search would{' '}
+              <em>decide</em> truth — and we could solve the halting problem by
+              asking whether &ldquo;machine <M>M</M> halts on <M>w</M>&rdquo; is
+              provable. Since halting is undecidable, some true statements must be
+              unprovable.
+            </P>
+          </Definition>
+          <Callout kind="warning" title="Incompleteness">
+            No single sound, mechanical proof system can capture all truths of
+            arithmetic. Adding the missing statement as an axiom only creates a
+            new, larger system with its own blind spot.
+          </Callout>
+        </>
+      )
 
     /* -------------------------------- Complexity ------------------------------- */
     case 'p-np':
@@ -1087,6 +1157,47 @@ export function LessonBody({ topicId }: { topicId: string }) {
             tractable — the same idea of reduction that proved undecidability now
             charts the landscape of hardness.
           </Callout>
+        </>
+      )
+    case 'np-catalog':
+      return (
+        <>
+          <Lead>
+            Once SAT was shown NP-complete, a cascade followed. Each new proof
+            just reduces an already-known NP-complete problem to the new one —
+            building a web of equivalent difficulty.
+          </Lead>
+          <Definition term="A few landmarks">
+            <ul className="ml-1 mt-1 space-y-1.5 text-sm">
+              <li>
+                <strong>3SAT</strong> — satisfiability with three literals per
+                clause; the usual starting point for reductions.
+              </li>
+              <li>
+                <strong>CLIQUE</strong> — is there a set of <M>k</M> mutually
+                adjacent vertices? (reduced from 3SAT)
+              </li>
+              <li>
+                <strong>VERTEX-COVER</strong> — <M>k</M> vertices touching every
+                edge (the complement of an independent set).
+              </li>
+              <li>
+                <strong>HAMPATH</strong> — a path visiting every vertex exactly
+                once.
+              </li>
+              <li>
+                <strong>SUBSET-SUM</strong> — does some subset of numbers add up
+                to a target?
+              </li>
+            </ul>
+          </Definition>
+          <Formula>3SAT ≤ₚ CLIQUE ≤ₚ VERTEX-COVER ≤ₚ …</Formula>
+          <P>
+            Because all are interreducible in polynomial time, a fast algorithm
+            for <em>any one</em> would instantly solve them all — and settle{' '}
+            <M>P = NP</M>. Try the reduction-map lab to see 3SAT → CLIQUE in
+            action.
+          </P>
         </>
       )
     case 'np-lab':

@@ -400,6 +400,81 @@ export const EXERCISES: ExerciseSet[] = [
       },
     ],
   },
+  {
+    topicId: 'dec-algorithms',
+    questions: [
+      {
+        id: 'deca-q1',
+        prompt: 'Which problem is decidable?',
+        options: [
+          'A_TM — does a Turing machine accept a string?',
+          'A_DFA — does a DFA accept a string?',
+          'HALT — does a TM halt on an input?',
+          'E_TM — is a TM’s language empty?',
+        ],
+        answer: 1,
+        explanation:
+          'A_DFA is decidable: just simulate the DFA on the string. The Turing-machine versions are all undecidable.',
+      },
+      {
+        id: 'deca-q2',
+        prompt: 'How do we decide EQ_DFA (do two DFAs accept the same language)?',
+        options: [
+          'run both on every string',
+          'test the symmetric difference for emptiness',
+          'minimize both and compare names',
+          'it is undecidable',
+        ],
+        answer: 1,
+        explanation:
+          'Build a DFA for the symmetric difference; the languages are equal exactly when that DFA accepts nothing (E_DFA).',
+      },
+    ],
+  },
+  {
+    topicId: 'np-catalog',
+    questions: [
+      {
+        id: 'npc-q1',
+        prompt: 'If one NP-complete problem had a polynomial-time algorithm, then…',
+        options: [
+          'only that problem would be easy',
+          'every problem in NP would be solvable in polynomial time',
+          'nothing would change',
+          'P would be larger than NP',
+        ],
+        answer: 1,
+        explanation:
+          'All NP problems reduce to any NP-complete one in polynomial time, so solving one fast solves them all — P = NP.',
+      },
+      {
+        id: 'npc-q2',
+        prompt: 'Reductions among NP-complete problems typically start from…',
+        options: ['HAMPATH', '3SAT', 'SUBSET-SUM', 'EQ_DFA'],
+        answer: 1,
+        explanation:
+          '3SAT is the usual launching point; from it CLIQUE, VERTEX-COVER, and many others are derived.',
+      },
+    ],
+  },
+  {
+    topicId: 'godel',
+    questions: [
+      {
+        id: 'godel-q1',
+        prompt: 'The computability route to incompleteness relies on the fact that…',
+        options: [
+          'the halting problem is undecidable',
+          'all proofs are short',
+          'arithmetic is finite',
+          'NP = P',
+        ],
+        answer: 0,
+        explanation:
+          'If every truth were provable, searching proofs would decide truth — and thus decide halting, which is impossible.',
+      },
+    ],
+  },
 ]
 
 export function exercisesFor(topicId: string): ExerciseSet | undefined {
