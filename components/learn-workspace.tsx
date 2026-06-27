@@ -30,17 +30,30 @@ export function LearnWorkspace({ initialTopic }: { initialTopic?: string }) {
   const [activeId, setActiveId] = useState(
     initialTopic ?? flat[0].topic.id,
   )
-  const [completed, setCompleted] = useState<Set<string>>(new Set())
   const [navOpen, setNavOpen] = useState(false)
+  const {
+    completed: completedList,
+    streak,
+    complete,
+    markStudiedToday,
+    recordScore,
+  } = useProgress()
+  const completed = useMemo(() => new Set(completedList), [completedList])
 
   const found = findTopic(activeId)!
+  const exercise = exercisesFor(activeId)
   const index = flat.findIndex((t) => t.topic.id === activeId)
   const prev = index > 0 ? flat[index - 1] : null
   const next = index < flat.length - 1 ? flat[index + 1] : null
   const progress = Math.round((completed.size / flat.length) * 100)
 
+  // Count any time the learner opens the app as a study day.
+  useEffect(() => {
+    markStudiedToday()
+  }, [markStudiedToday])
+
   function go(id: string) {
-    setCompleted((c) => new Set(c).add(activeId))
+    complete(activeId)
     setActiveId(id)
     setNavOpen(false)
     if (typeof window !== 'undefined') window.scrollTo({ top: 0 })
@@ -169,7 +182,15 @@ export function LearnWorkspace({ initialTopic }: { initialTopic?: string }) {
           <span className="font-mono text-xs text-muted-foreground">
             {found.module.chapter} · {found.module.title}
           </span>
-          <AboutDialog className="ml-auto" />
+          {streak > 0 && (
+            <span
+              className="ml-auto inline-flex items-center gap-1.5 rounded-full border border-accent/30 bg-accent/10 px-2.5 py-1 font-mono text-xs font-semibold text-accent"
+              title={`${streak}-day study streak`}
+            >
+              <Flame className="size-3.5" /> {streak}
+            </span>
+          )}
+          <AboutDialog className={streak > 0 ? '' : 'ml-auto'} />
         </header>
 
         <main className="mx-auto w-full max-w-3xl flex-1 px-5 py-10 lg:px-8 lg:py-14">
@@ -185,6 +206,12 @@ export function LearnWorkspace({ initialTopic }: { initialTopic?: string }) {
           <article className="space-y-6">
             <LessonBody topicId={activeId} />
           </article>
+
+          {exercise && (
+            <div className="mt-12">
+              <Quiz topicId={activeId} onScored={recordScore} />
+            </div>
+          )}
 
           {/* prev / next */}
           <div className="mt-14 grid gap-3 border-t border-border pt-8 sm:grid-cols-2">

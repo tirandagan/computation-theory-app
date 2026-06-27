@@ -17,7 +17,7 @@ interface RenderedEdge {
   from: string
   to: string
   label: string
-  curved: boolean
+  curved?: boolean
 }
 
 function mergeEdges(automaton: Automaton): RenderedEdge[] {
